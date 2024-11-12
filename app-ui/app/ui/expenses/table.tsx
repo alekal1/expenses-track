@@ -4,11 +4,12 @@ import { CeResponse } from '@/app/model/response/ceResponse';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { SearchExpensesResponse } from '@/app/model/response/searchExpensesResponse';
+import { TrashIcon } from '@heroicons/react/24/outline';
+import { lusitana } from '@/app/ui/fonts';
 
 export default function ExpensesTable() {
   const searchParams = useSearchParams();
   const query = searchParams?.get('query') ?? '';
-  // const currentPage = Number(searchParams?.get('page')) || 0;
 
   const [searchResponse, setSearchResponse] = useState<SearchExpensesResponse>();
 
@@ -28,9 +29,22 @@ export default function ExpensesTable() {
     fetchExpenses()
   }, [query]);
 
+  function spentTotal() {
+    if (!searchResponse) {
+      return 0
+    }
+
+    let sum = 0;
+    searchResponse.content.forEach((expense) => {
+      sum += expense.amount;
+    })
+    return sum;
+  }
+
 
   return (
     <main>
+      <h1 className={`${lusitana.className} mt-4 text-2xl`}>Total spent: {spentTotal()}</h1>
       <div className={"mt-6 flow-root"}>
         <div className={'inline-block min-w-full align-middle'}>
           <div className={'rounded-lg bg-gray-50 p-2 md:pt-0'}>
@@ -56,6 +70,12 @@ export default function ExpensesTable() {
                       <p>
                         {expense.description}
                       </p>
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <button className="rounded-md border p-2 hover:bg-gray-100">
+                        <span className="sr-only">Delete</span>
+                        <TrashIcon className="w-5"/>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -98,6 +118,14 @@ export default function ExpensesTable() {
                     </td>
                     <td className="whitespace-nowrap px-3 py-3">
                       {expense.description}
+                    </td>
+                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                      <div className="flex justify-end gap-3">
+                        <button className="rounded-md border p-2 hover:bg-gray-100">
+                          <span className="sr-only">Delete</span>
+                          <TrashIcon className="w-5"/>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

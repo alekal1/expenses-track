@@ -11,7 +11,7 @@ public interface ExpenseRepository extends JpaRepository<ExpenseEntity, Long> {
 
     @Query(value = "SELECT e.* FROM expense e " +
             "LEFT JOIN tag t on t.id = e.tag_id WHERE " +
-            "(:tagName is null OR t.id IN (SELECT id FROM tag WHERE tag.name = :tagName))", nativeQuery = true)
+            "(:tagName is null OR t.id IN (SELECT id FROM tag WHERE tag.name LIKE :tagName))", nativeQuery = true)
     Page<ExpenseEntity> findAllExpenses(
             @Param("tagName") String tagName,
             Pageable pageable
