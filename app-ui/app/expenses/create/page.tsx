@@ -1,9 +1,27 @@
+'use client'
+
 import Breadcrumbs from '@/app/ui/breadcrumbs';
-import { env } from 'process';
+import { useEffect, useState } from 'react';
+import { CeResponse } from '@/app/model/ceResponse';
+import { Tag } from '@/app/model/tag';
+import { CreateForm } from '@/app/ui/expenses/createForm';
 
 
-export default async function Page() {
-  console.log(process.env.NODE_ENV)
+export default function Page() {
+  const [tags, setTags] = useState<Tag[]>([{name: 'test'}, {name: 'test v2'}]);
+
+  useEffect(() => {
+    async function fetchTags() {
+      const res = await fetch('/v1/tag', {
+        method: 'GET'
+      })
+      const ceResponse: CeResponse = await res.json()
+
+      setTags(ceResponse.data as Tag[])
+    }
+
+    fetchTags()
+  }, [])
 
   return (
     <main>
@@ -17,6 +35,7 @@ export default async function Page() {
           active: true
         }
       ]}/>
+      <CreateForm tags={tags}/>
     </main>
   )
 }

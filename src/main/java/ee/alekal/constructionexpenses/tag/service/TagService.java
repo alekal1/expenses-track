@@ -8,6 +8,9 @@ import ee.alekal.constructionexpenses.tag.service.validator.TagValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class TagService {
@@ -23,6 +26,17 @@ public class TagService {
 
         var serviceResult = new ServiceResult<TagDto>();
         serviceResult.setObject(TagMapper.INSTANCE.toTagDto(savedEntity));
+
+        return serviceResult;
+    }
+
+    public ServiceResult<List<TagDto>> getAllTags() {
+        var tagEntities = repository.findAll();
+
+        var mappedEntities = tagEntities.stream().map(TagMapper.INSTANCE::toTagDto).toList();
+
+        var serviceResult = new ServiceResult<List<TagDto>>();
+        serviceResult.setObject(mappedEntities);
 
         return serviceResult;
     }
