@@ -2,24 +2,10 @@ import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
 import { CreateExpense } from '@/app/ui/expenses/buttons';
 import { Suspense } from 'react';
+import ExpensesTable from '@/app/ui/expenses/table';
 
-// type ExpensePageProps = {
-//   searchParams?: Promise<{
-//     query?:string;
-//     page?: string;
-//   }>
-// }
-//
-// props: Readonly<ExpensePageProps>
 
-export default async function Page() {
-  // const searchParams = await props.searchParams;
-  // const query = searchParams?.query ?? '';
-  // const currentPage = Number(searchParams?.page) || 0;
-  //
-  //
-  // console.log(searchParams, query, currentPage);
-
+export default function Page() {
   return (
     <div className={"w-full"}>
       <div className="flex w-full items-center justify-between">
@@ -31,6 +17,9 @@ export default async function Page() {
         </Suspense>
         <CreateExpense/>
       </div>
+      <Suspense fallback={<h1>Loading...</h1>}>
+        <ExpensesTable/>
+      </Suspense>
     </div>
   )
 }

@@ -2,13 +2,13 @@
 
 import Breadcrumbs from '@/app/ui/breadcrumbs';
 import { useEffect, useState } from 'react';
-import { CeResponse } from '@/app/model/ceResponse';
+import { CeResponse } from '@/app/model/response/ceResponse';
 import { Tag } from '@/app/model/tag';
 import { CreateForm } from '@/app/ui/expenses/createForm';
 
 
 export default function Page() {
-  const [tags, setTags] = useState<Tag[]>([{name: 'test'}, {name: 'test v2'}]);
+  const [tags, setTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     async function fetchTags() {

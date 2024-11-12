@@ -1,4 +1,5 @@
 import Breadcrumbs from '@/app/ui/breadcrumbs';
+import { CreateForm } from '@/app/ui/tags/createForm';
 
 export default function Page() {
   return (
@@ -13,6 +14,7 @@ export default function Page() {
           active: true
         }
       ]}/>
+      <CreateForm/>
     </main>
   )
 }
