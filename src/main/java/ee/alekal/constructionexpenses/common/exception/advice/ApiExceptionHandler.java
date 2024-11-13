@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ApiExceptionHandler {
 
     @ExceptionHandler(CEBaseException.class)
-    public ResponseEntity<CEResponse<?>> handleCEBaseException(CEBaseException exception) {
+    public ResponseEntity<CEResponse<Object>> handleCEBaseException(CEBaseException exception) {
         log.error(exception.getMessage(), exception);
 
         return ResponseEntity
