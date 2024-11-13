@@ -42,4 +42,4 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-processResources.dependsOn('app-ui:build')
+build.dependsOn('app-ui:build')
