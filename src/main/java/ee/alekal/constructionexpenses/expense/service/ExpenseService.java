@@ -1,5 +1,7 @@
 package ee.alekal.constructionexpenses.expense.service;
 
+import ee.alekal.constructionexpenses.common.constants.ObjectStatus;
+import ee.alekal.constructionexpenses.common.exception.CEBusinessException;
 import ee.alekal.constructionexpenses.common.service.model.ServiceResult;
 import ee.alekal.constructionexpenses.expense.model.dto.ExpenseDto;
 import ee.alekal.constructionexpenses.expense.model.mapper.ExpenseMapper;
@@ -30,6 +32,7 @@ public class ExpenseService {
         var mappedEntity = ExpenseMapper.INSTANCE.toExpenseEntity(expense);
         var tagEntity = tagRepository.findByName(expense.getTagName()).get();
         mappedEntity.setTag(tagEntity);
+        mappedEntity.setStatus(ObjectStatus.CURRENT.getValue());
         tagEntity.addExpense(mappedEntity);
 
         var savedExpenseEntity = expenseRepository.save(mappedEntity);
@@ -67,5 +70,17 @@ public class ExpenseService {
         response.setPageNumber(expenseDtos.getNumber() + 1);
 
         return response;
+    }
+
+    public void deleteExpense(Long id) {
+        var expenseEntityOptional = repository.findById(id);
+        if (expenseEntityOptional.isEmpty()) {
+            throw new CEBusinessException("Expense not found!");
+        }
+
+        var entity = expenseEntityOptional.get();
+        entity.setStatus(ObjectStatus.DELETED.getValue());
+
+        repository.saveAndFlush(entity);
     }
 }

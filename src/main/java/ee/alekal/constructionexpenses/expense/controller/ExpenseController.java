@@ -54,7 +54,14 @@ public class ExpenseController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<CEResponse<?>> deleteExpense(@PathVariable Long id) {
-        // TODO
-        return ResponseEntity.ok(null);
+        service.deleteExpense(id);
+
+        var ceResponse = CEResponse.builder()
+                .data(null)
+                .httpStatus(HttpStatus.OK.value())
+                .message("Expense deleted.")
+                .build();
+
+        return ResponseEntity.ok(ceResponse);
     }
 }

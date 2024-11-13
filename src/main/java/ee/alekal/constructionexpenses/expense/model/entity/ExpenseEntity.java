@@ -28,6 +28,9 @@ public class ExpenseEntity {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "status", nullable = false)
+    private String status;
+
     @ManyToOne
     private TagEntity tag;
 }

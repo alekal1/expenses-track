@@ -6,6 +6,8 @@ import { useSearchParams } from 'next/navigation';
 import { SearchExpensesResponse } from '@/app/model/response/searchExpensesResponse';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function ExpensesTable() {
   const searchParams = useSearchParams();
@@ -13,21 +15,36 @@ export default function ExpensesTable() {
 
   const [searchResponse, setSearchResponse] = useState<SearchExpensesResponse>();
 
-  useEffect(() => {
-    async function fetchExpenses() {
-      const url = query ? `/v1/expense?tagName=${query}` : `/v1/expense`;
-      const res = await fetch(url, {
-        method: 'GET'
-      })
-      const ceResponse: CeResponse = await res.json();
+  async function fetchExpenses() {
+    const url = query ? `/v1/expense?tagName=${query}` : `/v1/expense`;
+    const res = await fetch(url, {
+      method: 'GET'
+    })
+    const ceResponse: CeResponse = await res.json();
 
-      if (200 === ceResponse.httpStatus) {
-        setSearchResponse(ceResponse.data as SearchExpensesResponse)
-      }
+    if (200 === ceResponse.httpStatus) {
+      setSearchResponse(ceResponse.data as SearchExpensesResponse)
     }
+  }
 
+  async function deleteExpense(expenseId: number) {
+    const res = await fetch(`/v1/expense/${expenseId}`, {
+      method: 'DELETE'
+    })
+
+    const ceResponse: CeResponse = await res.json();
+
+    if (200 === ceResponse.httpStatus) {
+      toast(ceResponse.message)
+      fetchExpenses()
+    }
+  }
+
+  useEffect(() => {
     fetchExpenses()
   }, [query]);
+
+
 
   function spentTotal() {
     if (!searchResponse) {
@@ -44,6 +61,10 @@ export default function ExpensesTable() {
 
   return (
     <main>
+      <ToastContainer
+        position={'bottom-center'}
+        theme={'dark'}
+      />
       <h1 className={`${lusitana.className} mt-4 text-2xl`}>Total spent: {spentTotal()}</h1>
       <div className={"mt-6 flow-root"}>
         <div className={'inline-block min-w-full align-middle'}>
@@ -72,7 +93,7 @@ export default function ExpensesTable() {
                       </p>
                     </div>
                     <div className="flex justify-end gap-2">
-                      <button className="rounded-md border p-2 hover:bg-gray-100">
+                      <button onClick={() => deleteExpense(expense.id!)} className="rounded-md border p-2 hover:bg-gray-100">
                         <span className="sr-only">Delete</span>
                         <TrashIcon className="w-5"/>
                       </button>
@@ -121,7 +142,7 @@ export default function ExpensesTable() {
                     </td>
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
-                        <button className="rounded-md border p-2 hover:bg-gray-100">
+                        <button onClick={() => deleteExpense(expense.id!)} className="rounded-md border p-2 hover:bg-gray-100">
                           <span className="sr-only">Delete</span>
                           <TrashIcon className="w-5"/>
                         </button>

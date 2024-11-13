@@ -2,6 +2,14 @@ plugins {
     id "com.github.node-gradle.node" version "7.1.0"
 }
 
+node {
+    version = '22.6.0'
+    download = true
+
+    workDir = file("${project.projectDir}/.gradle/nodejs")
+    npmWorkDir = file("${project.projectDir}/.gradle/pnpm")
+}
+
 task build(type: NpmTask) {
     args = ['run', 'build']
 }
