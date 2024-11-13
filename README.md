@@ -4,7 +4,7 @@ Make sure Docker is installed on your local machine.
 
 Run `docker compose up` to start application in docker.
 
-Open [http://localhost:8080](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:8080](http://localhost:8080) with your browser to see the result.
 
 ## Build logic
 
