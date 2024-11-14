@@ -3,7 +3,7 @@
 import { lusitana } from '@/app/ui/fonts';
 import React, { useEffect, useState } from 'react';
 import "chart.js/auto";
-import { Bar } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
 import { ChartResponse } from '@/app/model/response/chartResponse';
 import { CeResponse } from '@/app/model/response/ceResponse';
 
@@ -28,7 +28,7 @@ export default function Home() {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top'
+        display: false
       }
     }
   }
@@ -45,7 +45,12 @@ export default function Home() {
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Dashboard
       </h1>
-      <Bar options={chartOptions} data={chartData}/>
+      <div className={"w-auto"}>
+        <Bar options={chartOptions} data={chartData}/>
+      </div>
+      <div className={'w-auto mt-40'}>
+        <Pie options={chartOptions} data={chartData}/>
+      </div>
     </main>
   );
 }

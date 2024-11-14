@@ -39,6 +39,7 @@ public class ManagementController {
         var ceResponse = CEResponse.builder()
                 .data(null)
                 .message(serviceResult.getMessage())
+                .httpStatus(200)
                 .build();
 
         return ResponseEntity.ok(ceResponse);

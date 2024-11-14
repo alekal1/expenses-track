@@ -1,5 +1,5 @@
-import NavLinks from '@/app/ui/dashboard/nav-links';
-import NavButtons from '@/app/ui/dashboard/nav-buttons';
+import NavLinks from '@/app/ui/nav/nav-links';
+import NavButtons from '@/app/ui/nav/nav-buttons';
 
 export default function SideNav() {
   return (
