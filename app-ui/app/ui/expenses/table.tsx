@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { SearchExpensesResponse } from '@/app/model/response/searchExpensesResponse';
 import { TrashIcon } from '@heroicons/react/24/outline';
-import { lusitana } from '@/app/ui/fonts';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -46,26 +45,12 @@ export default function ExpensesTable() {
 
 
 
-  function spentTotal() {
-    if (!searchResponse) {
-      return 0
-    }
-
-    let sum = 0;
-    searchResponse.content.forEach((expense) => {
-      sum += expense.amount;
-    })
-    return sum;
-  }
-
-
   return (
     <main>
       <ToastContainer
         position={'bottom-center'}
         theme={'dark'}
       />
-      <h1 className={`${lusitana.className} mt-4 text-2xl`}>Total spent: {spentTotal()}</h1>
       <div className={"mt-6 flow-root"}>
         <div className={'inline-block min-w-full align-middle'}>
           <div className={'rounded-lg bg-gray-50 p-2 md:pt-0'}>

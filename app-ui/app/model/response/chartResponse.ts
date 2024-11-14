@@ -1,9 +1,9 @@
 export type ChartResponse = {
-  labels: string[];
-  datasets: Dataset[]
+  totalSum: number;
+  datasets: Dataset[];
 }
 
 type Dataset = {
-  label: string;
-  data: number[]
+  x: string;
+  y: number;
 }

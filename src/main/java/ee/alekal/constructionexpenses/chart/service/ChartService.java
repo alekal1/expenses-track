@@ -8,7 +8,6 @@ import ee.alekal.constructionexpenses.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,21 +20,23 @@ public class ChartService {
 
         var allTags = tagRepository.findAll();
 
-        var dataset = new ChartResponse.Dataset();
-        dataset.setLabel("Expenses by tag");
-
+        long totalSum = 0;
         for (TagEntity tagEntity : allTags) {
-            chartResponse.addLabel(tagEntity.getName());
-
-            var tagExpenses = tagEntity.getExpenses().stream()
+            var tagTotalExpenses = tagEntity.getExpenses().stream()
                     .map(ExpenseEntity::getAmount)
                     .mapToLong(Long::longValue)
                     .sum();
 
-            dataset.addData(tagExpenses);
+            chartResponse.addDataset(
+                    ChartResponse.Dataset.builder()
+                            .x(tagEntity.getName())
+                            .y(tagTotalExpenses)
+                            .build()
+            );
+            totalSum += tagTotalExpenses;
         }
 
-        chartResponse.setDatasets(List.of(dataset));
+        chartResponse.setTotalSum(totalSum);
 
         var serviceResult = new ServiceResult<ChartResponse>();
         serviceResult.setObject(chartResponse);

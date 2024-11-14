@@ -1,5 +1,6 @@
 package ee.alekal.constructionexpenses.chart.model.response;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -8,20 +9,17 @@ import java.util.Collection;
 @Data
 public class ChartResponse {
 
-    private Collection<String> labels = new ArrayList<>();
+    private Long totalSum;
     private Collection<Dataset> datasets = new ArrayList<>();
 
-    public void addLabel(String label) {
-        labels.add(label);
+    public void addDataset(Dataset dataset) {
+        datasets.add(dataset);
     }
 
     @Data
+    @Builder
     public static class Dataset {
-        private String label;
-        private Collection<Long> data = new ArrayList<>();
-
-        public void addData(Long sum) {
-            data.add(sum);
-        }
+        private String x; // Tag name
+        private Long y; // Tag's total
     }
 }
