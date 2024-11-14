@@ -2,27 +2,40 @@
 
 import { CeResponse } from '@/app/model/response/ceResponse';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { SearchExpensesResponse } from '@/app/model/response/searchExpensesResponse';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function ExpensesTable() {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const query = searchParams?.get('query') ?? '';
+  const { replace } = useRouter()
+  const tagNameFilter = searchParams?.get('query') ?? '';
+  const page = searchParams?.get('page') ? (Number(searchParams.get('page')) - 1) : 0;
 
   const [searchResponse, setSearchResponse] = useState<SearchExpensesResponse>();
 
   async function fetchExpenses() {
-    const url = query ? `/v1/expense?tagName=${query}` : `/v1/expense`;
+
+    const url = tagNameFilter
+      ? `/v1/expense?page=${page}&size=10&tagName=${tagNameFilter}`
+      : `/v1/expense?page=${page}&size=10`;
     const res = await fetch(url, {
       method: 'GET'
     })
     const ceResponse: CeResponse = await res.json();
 
     if (200 === ceResponse.httpStatus) {
-      setSearchResponse(ceResponse.data as SearchExpensesResponse)
+      const responseData = ceResponse.data as SearchExpensesResponse;
+      const params = new URLSearchParams(searchParams);
+
+      params.set('totalPages', `${responseData.totalPages}`);
+
+      replace(`${pathname}?${params.toString()}`);
+
+      setSearchResponse(responseData)
     }
   }
 
@@ -41,7 +54,7 @@ export default function ExpensesTable() {
 
   useEffect(() => {
     fetchExpenses()
-  }, [query]);
+  }, [tagNameFilter, page]);
 
 
 

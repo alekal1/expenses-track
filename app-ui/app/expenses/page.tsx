@@ -3,6 +3,7 @@ import Search from '@/app/ui/search';
 import { CreateExpense } from '@/app/ui/expenses/buttons';
 import { Suspense } from 'react';
 import ExpensesTable from '@/app/ui/expenses/table';
+import Pagination from '@/app/ui/expenses/pagination';
 
 
 export default function Page() {
@@ -19,6 +20,7 @@ export default function Page() {
       </div>
       <Suspense fallback={<h1>Loading...</h1>}>
         <ExpensesTable/>
+        <Pagination/>
       </Suspense>
     </div>
   )

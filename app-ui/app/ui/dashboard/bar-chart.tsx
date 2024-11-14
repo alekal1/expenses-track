@@ -31,18 +31,18 @@ export function BarChart() {
     }
 
     const options = {
-      colors: ["#FDBA8C"],
+      colors: ['#FDBA8C'],
       series: [
         {
-          name: "Total",
-          color: "#FDBA8C",
-          data: chartData.datasets,
+          name: 'Total',
+          color: '#FDBA8C',
+          data: chartData.datasets
         },
       ],
       chart: {
-        type: "bar",
-        height: "320px",
-        fontFamily: "Inter, sans-serif",
+        type: 'bar',
+        height: '320px',
+        fontFamily: 'Inter, sans-serif',
         toolbar: {
           show: false,
         },
@@ -50,8 +50,8 @@ export function BarChart() {
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: "70%",
-          borderRadiusApplication: "end",
+          columnWidth: '70%',
+          borderRadiusApplication: 'end',
           borderRadius: 8,
         },
       },
@@ -59,13 +59,13 @@ export function BarChart() {
         shared: true,
         intersect: false,
         style: {
-          fontFamily: "Inter, sans-serif",
+          fontFamily: 'Inter, sans-serif',
         },
       },
       states: {
         hover: {
           filter: {
-            type: "darken",
+            type: 'darken',
             value: 1,
           },
         },
@@ -73,7 +73,7 @@ export function BarChart() {
       stroke: {
         show: true,
         width: 0,
-        colors: ["transparent"],
+        colors: ['transparent'],
       },
       grid: {
         show: false,
@@ -95,7 +95,7 @@ export function BarChart() {
         labels: {
           show: true,
           style: {
-            fontFamily: "Inter, sans-serif",
+            fontFamily: 'Inter, sans-serif',
             cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
           }
         },
@@ -114,7 +114,7 @@ export function BarChart() {
       },
     }
 
-    if(typeof ApexCharts !== 'undefined') {
+    if (typeof ApexCharts !== 'undefined') {
       const chart = new ApexCharts(node, options);
       chart.render();
     }
@@ -128,11 +128,11 @@ export function BarChart() {
   }
 
   return (
-    <div className="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+    <div className="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
       <div className="grid grid-cols-2">
         <dl className="flex items-center">
           <dt className="text-gray-500 dark:text-gray-400 text-sm font-normal me-1">Money spent:</dt>
-          <dd className="text-gray-900 text-sm dark:text-white font-semibold">${chartData.totalSum}</dd>
+          <dd className="text-gray-900 text-sm dark:text-white font-semibold">€{chartData.totalSum}</dd>
         </dl>
       </div>
 
