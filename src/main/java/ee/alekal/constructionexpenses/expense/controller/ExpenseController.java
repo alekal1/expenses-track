@@ -1,7 +1,6 @@
 package ee.alekal.constructionexpenses.expense.controller;
 
 import ee.alekal.constructionexpenses.common.response.CEResponse;
-import ee.alekal.constructionexpenses.common.service.model.ServiceResult;
 import ee.alekal.constructionexpenses.expense.model.dto.ExpenseDto;
 import ee.alekal.constructionexpenses.expense.model.request.SearchExpensesRequest;
 import ee.alekal.constructionexpenses.expense.model.response.SearchExpensesResponse;
@@ -42,7 +41,7 @@ public class ExpenseController {
     public ResponseEntity<CEResponse<SearchExpensesResponse>> searchExpenses(
             Pageable pageable,
             SearchExpensesRequest expensesRequest) {
-        ServiceResult<SearchExpensesResponse> serviceResult = service.searchExpenses(pageable, expensesRequest);
+        var serviceResult = service.searchExpenses(pageable, expensesRequest);
 
         var ceResponse = CEResponse.<SearchExpensesResponse>builder()
                 .data(serviceResult.getObject())
@@ -53,13 +52,13 @@ public class ExpenseController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<CEResponse<?>> deleteExpense(@PathVariable Long id) {
-        service.deleteExpense(id);
+    public ResponseEntity<CEResponse<Object>> deleteExpense(@PathVariable Long id) {
+        var serviceResult = service.deleteExpense(id);
 
         var ceResponse = CEResponse.builder()
                 .data(null)
                 .httpStatus(HttpStatus.OK.value())
-                .message("Expense deleted.")
+                .message(serviceResult.getMessage())
                 .build();
 
         return ResponseEntity.ok(ceResponse);

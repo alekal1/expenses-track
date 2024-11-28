@@ -8,8 +8,8 @@ import ee.alekal.constructionexpenses.expense.model.mapper.ExpenseMapper;
 import ee.alekal.constructionexpenses.expense.model.request.SearchExpensesRequest;
 import ee.alekal.constructionexpenses.expense.model.response.SearchExpensesResponse;
 import ee.alekal.constructionexpenses.expense.repository.ExpenseRepository;
-import ee.alekal.constructionexpenses.expense.service.validator.ExpenseValidator;
 import ee.alekal.constructionexpenses.tag.repository.TagRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,16 +21,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ExpenseService {
 
-    private final ExpenseValidator validator;
     private final ExpenseRepository expenseRepository;
     private final ExpenseRepository repository;
     private final TagRepository tagRepository;
 
+    @Transactional
     public ServiceResult<ExpenseDto> saveNewExpense(ExpenseDto expense) {
-        validator.validateSaveNewExpense(expense);
-
         var mappedEntity = ExpenseMapper.INSTANCE.toExpenseEntity(expense);
-        var tagEntity = tagRepository.findByName(expense.getTagName()).get();
+
+        var tagEntity = tagRepository.findByName(expense.getTagName())
+                .orElseThrow(() -> new CEBusinessException("Tag not found!"));
         mappedEntity.setTag(tagEntity);
         mappedEntity.setStatus(ObjectStatus.CURRENT.getValue());
         tagEntity.addExpense(mappedEntity);
@@ -72,15 +72,17 @@ public class ExpenseService {
         return response;
     }
 
-    public void deleteExpense(Long id) {
-        var expenseEntityOptional = repository.findById(id);
-        if (expenseEntityOptional.isEmpty()) {
-            throw new CEBusinessException("Expense not found!");
-        }
+    public ServiceResult<Object> deleteExpense(Long id) {
+        var expenseEntity = expenseRepository.findById(id)
+                .orElseThrow(() -> new CEBusinessException("Expense not found!"));
 
-        var entity = expenseEntityOptional.get();
-        entity.setStatus(ObjectStatus.DELETED.getValue());
+        expenseEntity.setStatus(ObjectStatus.DELETED.getValue());
 
-        repository.saveAndFlush(entity);
+        repository.saveAndFlush(expenseEntity);
+
+        var serviceResult = new ServiceResult<>();
+        serviceResult.setMessage("Expense deleted!");
+
+        return serviceResult;
     }
 }
